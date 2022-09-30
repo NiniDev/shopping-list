@@ -12,4 +12,11 @@
       <ion-title size="large">Einkaufsliste</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-list>
+    <ion-item *ngFor="let item of shoppingList">
+      <ion-label>{{item.toString()}}</ion-label>
+      <ion-checkbox slot="end" (ionChange)="toggleChecked(item)" [checked]="item.getChecked()"></ion-checkbox>
+    </ion-item>
+  </ion-list>
 </ion-content>
