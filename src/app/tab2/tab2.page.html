@@ -12,4 +12,20 @@
       <ion-title size="large">Rezepte</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-list>
+    <ion-item *ngFor="let recipe of recipes" (click)="openRecipe(recipe)">
+      <ion-label>
+        <h2>
+          <ion-icon name="star" *ngIf="recipe.getFavorite()" color="warning"></ion-icon>
+          {{recipe.getTitle()}}
+        </h2>
+        <p>
+          <ion-badge color="primary">
+            <ion-icon name="timer"></ion-icon> {{getTotalDurationString(recipe)}}
+          </ion-badge>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
