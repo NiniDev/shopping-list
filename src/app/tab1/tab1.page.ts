@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Ingredient } from '../models/ingredient-model';
+import { AlertController } from '@ionic/angular';
 import { ListItem } from '../models/listitem-model';
 import { ShoppinglistService } from '../services/shoppinglist.service';
 
@@ -12,12 +12,11 @@ export class Tab1Page implements OnInit {
   shoppingList: ListItem[] = [];
 
   constructor(
-    private shoppingListService: ShoppinglistService
+    private shoppingListService: ShoppinglistService,
+    private alertController: AlertController
   ) { }
 
   async ngOnInit() {
-    const listitem = new ListItem("Äpfel", false, 2)
-    await this.shoppingListService.addListItem(listitem);
     await this.shoppingListService.deleteChecked();
     this.shoppingList = await this.shoppingListService.getShoppingList();
   }
@@ -31,4 +30,37 @@ export class Tab1Page implements OnInit {
     return this.shoppingList.filter(listItem => listItem.getChecked() === checked);
   }
 
+  addShoppingItem() {
+    this.alertController.create({
+      header: 'Neuer Einkaufsartikel',
+      inputs: [
+        {
+          name: 'name',
+          type: 'text',
+          placeholder: 'Name'
+        },
+        {
+          name: 'amount',
+          type: 'number',
+          placeholder: 'Menge'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Abbrechen',
+          role: 'cancel'
+        },
+        {
+          text: 'Hinzufügen',
+          handler: async data => {
+            const listItem = new ListItem(data.name, false, data.amount);
+            await this.shoppingListService.addListItem(listItem);
+            this.shoppingList = await this.shoppingListService.getShoppingList();
+          }
+        }
+      ]
+    }).then(alert => {
+      alert.present();
+    });
+  }
 }
