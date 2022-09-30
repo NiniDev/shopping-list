@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Ingredient } from '../models/ingredient-model';
 import { Recipe } from '../models/recipe-model';
 import { RecipeService } from '../services/recipe.service';
@@ -12,7 +13,8 @@ export class Tab2Page implements OnInit {
   recipes: Recipe[] = [] as Recipe[];
 
   constructor(
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -46,7 +48,7 @@ export class Tab2Page implements OnInit {
       { name: 'Gesamtzeit', duration: 40 },
     ];
     const recipe = new Recipe('Potatoe Wedges mit Knoblauch Dip', ingredients, instructions, durations, true, 2);
-    await this.recipeService.addRecipe(recipe);
+    // await this.recipeService.addRecipe(recipe);
     this.recipes = await this.recipeService.getRecipes();
   }
 
@@ -59,5 +61,9 @@ export class Tab2Page implements OnInit {
       }
     });
     return dur + ' Minuten';
+  }
+
+  openRecipe(recipe) {
+    this.router.navigateByUrl('/recipe/' + recipe.id);
   }
 }

@@ -1,9 +1,33 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>recipe</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{recipe?.getTitle()}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-grid>
+    <ion-row>
+        <ion-label>Zutaten</ion-label>
+    </ion-row>
+    <ion-row>
+      <ion-col size="auto">
+        <ion-row *ngFor="let ingredient of recipe?.getIngredients()">
+          <ion-label style="width: 100%; text-align: right;">{{ingredient?.getAmount() ? ingredient?.getAmount() : '' }} {{ingredient?.getUnit()}}</ion-label>
+        </ion-row>
+      </ion-col>
+      <ion-col size="auto">
+        <ion-row *ngFor="let ingredient of recipe?.getIngredients()">
+          <ion-label>{{ingredient?.getName()}}</ion-label>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-button expand="block" (click)="onAddToShoppingList()">Zutaten hinzufügen</ion-button>
+    </ion-row>
+  </ion-grid>
+
 
 </ion-content>
