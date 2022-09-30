@@ -9,11 +9,14 @@ export class Recipe {
         public durations: object[],
         public favorite: boolean,
         public personCount: number,
-        private id: string  = uuid.v4(),
-    ) { }
+        private id?: string
+    ) {
+        this.id = id || uuid.v4();
+    }
 
     public getIngredients(): Ingredient[] {
-        return this.ingredients;
+        return this.ingredients.map(ingredient => {
+            return new Ingredient(ingredient.name, ingredient.amount, ingredient.unit)});
     }
 
     public getTitle(): string {

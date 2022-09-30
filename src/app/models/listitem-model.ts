@@ -5,8 +5,9 @@ export class ListItem {
         public ingredient: Ingredient|string,
         public checked: boolean = false,
         public amount: number,
-        private id: string = uuid.v4()
+        private id?: string
     ) {
+        this.id = id || uuid.v4();
     }
 
     toString() {
