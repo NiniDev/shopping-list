@@ -15,13 +15,13 @@ export class RecipeService {
   async init() {
     this.store = new Storage();
     await this.store.create();
-    this.store.set('recipes', []);
+    // this.store.set('recipes', []);
   }
 
   async getRecipes() {
     const recipes = await this.store.get('recipes') || [];
     return recipes.map(recipe => {
-      return new Recipe(recipe.title, recipe.ingredients, recipe.instructions, recipe.durations, recipe.favorite, recipe.personCount);
+      return new Recipe(recipe.title, recipe.ingredients, recipe.instructions, recipe.durations, recipe.favorite, recipe.personCount, recipe.id);
     });
   }
 
@@ -52,6 +52,8 @@ export class RecipeService {
 
   async getRecipe(id: string) {
     const recipes = await this.getRecipes();
+    console.log(recipes);
+    
     return recipes.find(recipe => recipe.getId() === id);
   }
 
