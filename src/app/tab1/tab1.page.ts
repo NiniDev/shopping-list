@@ -19,16 +19,16 @@ export class Tab1Page implements OnInit {
     const listitem = new ListItem("Äpfel", false, 2)
     await this.shoppingListService.addListItem(listitem);
     await this.shoppingListService.deleteChecked();
-    this.shoppingList = await this.getShoppingList();
-  }
-
-  async getShoppingList() {
-    return await this.shoppingListService.getShoppingList();
+    this.shoppingList = await this.shoppingListService.getShoppingList();
   }
 
   toggleChecked(listItem: ListItem) {
     listItem.setChecked(!listItem.getChecked());
     this.shoppingListService.updateListItem(listItem, { checked: listItem.getChecked() });
+  }
+
+  getShoppingList(checked: boolean) {
+    return this.shoppingList.filter(listItem => listItem.getChecked() === checked);
   }
 
 }
