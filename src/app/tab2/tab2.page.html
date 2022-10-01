@@ -13,7 +13,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-list>
+  <ion-list *ngIf="recipes.length">
     <ion-item *ngFor="let recipe of recipes" (click)="openRecipe(recipe)">
       <ion-label>
         <h2>
