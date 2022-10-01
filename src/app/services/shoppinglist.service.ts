@@ -55,4 +55,10 @@ export class ShoppinglistService {
   async clearShoppingList() {
     await this.store.remove('shoppingList');
   }
+
+  async addItems(items: ListItem[]) {
+    const shoppingList = await this.getShoppingList();
+    shoppingList.push(...items);
+    await this.store.set('shoppingList', shoppingList);
+  }
 }
