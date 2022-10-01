@@ -38,12 +38,12 @@ export class RecipeService {
     await this.store.set('recipes', recipes);
   }
 
-  async updateRecipe(recipe: Recipe, changes: { title?: string, ingredients?: any[], instructions?: string[], durations?: object[], favorite?: boolean, personCount?: number }) {
+  async updateRecipe(recipe: Recipe, changes: { title?: string, ingredients?: any[], instructions?: object[], durations?: object[], favorite?: boolean, personCount?: number }) {
     const recipes = await this.getRecipes() as Recipe[];
     const index = recipes.findIndex(item => item.getId() === recipe.getId());
     recipes[index].setTitle(changes.title || recipe.getTitle());
     recipes[index].setIngredients(changes.ingredients || recipe.getIngredients());
-    recipes[index].setInstructions(changes.instructions || recipe.getInstructions());
+    recipes[index].setInstructions(changes.instructions || recipe.getInstructions().map(instruction => instruction['text']));
     recipes[index].setDurations(changes.durations || recipe.getDurations());
     recipes[index].setFavorite(changes.favorite || recipe.getFavorite());
     recipes[index].setPersonCount(changes.personCount || recipe.getPersonCount());
