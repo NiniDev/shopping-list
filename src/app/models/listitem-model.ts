@@ -1,5 +1,6 @@
 import { Ingredient } from "./ingredient-model";
 import * as uuid from 'uuid';
+
 export class ListItem {
     constructor(
         public ingredient: Ingredient|string,
@@ -11,7 +12,10 @@ export class ListItem {
     }
 
     toString() {
-        return `${this.amount} ${this.ingredient.toString()}`;
+        if (this.ingredient instanceof Object) {
+            return `${this.ingredient.name}`;
+        }
+        return `${this.amount} ${this.ingredient}`;
     }
 
     setChecked(checked: boolean) {
