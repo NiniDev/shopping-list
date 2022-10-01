@@ -8,13 +8,17 @@
 </ion-header>
 
 <ion-content>
-  <ion-chip color="primary" *ngIf="recipe?.getFavorite()">
+  <ion-chip color="primary" *ngIf="recipe?.getFavorite()" (click)="toggleFavorite()">
     <ion-icon name="star"></ion-icon>
     <ion-label>Favorite</ion-label>
   </ion-chip>
   <ion-chip color="primary" (click)="changePersonCount()">
     <ion-icon name="person"></ion-icon>
     <ion-label>{{currentPersonCount}} Portionen</ion-label>
+  </ion-chip>
+  <ion-chip color="medium" style="float: right;" *ngIf="!recipe?.getFavorite()" (click)="toggleFavorite()">
+    <ion-icon name="star"></ion-icon>
+    <ion-label>Favorisieren</ion-label>
   </ion-chip>
   <ion-grid>
     <ion-row>

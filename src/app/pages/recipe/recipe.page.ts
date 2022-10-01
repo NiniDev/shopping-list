@@ -73,4 +73,9 @@ export class RecipePage implements OnInit {
     }
   }
 
+  toggleFavorite() {
+    this.recipe.setFavorite(!this.recipe.getFavorite());
+    console.log(this.recipe.getFavorite());
+    this.recipeService.updateRecipe(this.recipe, this.recipe);
+  }
 }
