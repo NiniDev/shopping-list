@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 import { Ingredient } from '../models/ingredient-model';
 import { Recipe } from '../models/recipe-model';
 import { RecipeService } from '../services/recipe.service';
+import { CreateRecipeComponent } from '../modals/recipe/create-recipe/create-recipe.component';
 
 @Component({
   selector: 'app-tab2',
@@ -14,7 +16,8 @@ export class Tab2Page implements OnInit {
 
   constructor(
     private recipeService: RecipeService,
-    private router: Router
+    private router: Router,
+    private modalController: ModalController
   ) {}
 
   async ngOnInit() {
@@ -64,6 +67,23 @@ export class Tab2Page implements OnInit {
   }
 
   openRecipe(recipe) {
-    this.router.navigateByUrl('/recipe/' + recipe.id);
+      this.router.navigate(['/recipe', recipe.getId()]);
+  }
+
+  createRecipe() {
+    this.modalController.create({
+      component: CreateRecipeComponent,
+      componentProps: {
+        mode: 'create'
+      }
+    }).then(modalEl => {
+      modalEl.present();
+      return modalEl.onDidDismiss();
+    }).then(async resultData => {
+      console.log(resultData.data, resultData.role);
+      if (resultData.role === 'confirm') {
+        this.recipes = await this.recipeService.getRecipes();
+      }
+    });
   }
 }
