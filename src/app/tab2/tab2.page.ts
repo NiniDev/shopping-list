@@ -4,7 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { Ingredient } from '../models/ingredient-model';
 import { Recipe } from '../models/recipe-model';
 import { RecipeService } from '../services/recipe.service';
-import { CreateRecipeComponent } from '../modals/recipe/create-recipe/create-recipe.component';
+import { CreateRecipePage } from '../modals/recipe/create-recipe/create-recipe.page';
 
 @Component({
   selector: 'app-tab2',
@@ -72,7 +72,7 @@ export class Tab2Page implements OnInit {
 
   createRecipe() {
     this.modalController.create({
-      component: CreateRecipeComponent,
+      component: CreateRecipePage,
       componentProps: {
         mode: 'create'
       }
