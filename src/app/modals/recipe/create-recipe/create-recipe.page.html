@@ -9,5 +9,61 @@
     <ion-label position="floating">Titel</ion-label>
     <ion-input type="text" [(ngModel)]="recipe.title"></ion-input>
   </ion-item>
+  <ion-item>
+    <ion-label position="floating">Portionen</ion-label>
+    <ion-input type="number" [(ngModel)]="recipe.personCount"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Zutaten</ion-label>
+    <ion-button (click)="addIngredient()">Zutat hinzufügen</ion-button>
+  </ion-item>
+  <ion-row *ngIf="recipe.ingredients.length" class="ion-margin">
+    <ion-col>Zutat</ion-col>
+    <ion-col>Menge</ion-col>
+    <ion-col>Einheit</ion-col>
+  </ion-row>
+  <ion-row *ngFor="let ingredient of recipe.ingredients" class="ion-margin">
+    <ion-input type="text" [(ngModel)]="ingredient.name"></ion-input>
+    <ion-input type="number" [(ngModel)]="ingredient.amount"></ion-input>
+    <ion-input type="text" [(ngModel)]="ingredient.unit"></ion-input>
+    <ion-button (click)="removeIngredient(ingredient)" size="small" color="danger">
+      <ion-icon slot="icon-only" name="trash"></ion-icon>
+    </ion-button>
+  </ion-row>
+  <ion-item>
+    <ion-label>Zubereitung</ion-label>
+    <ion-button (click)="addInstruction()">Schritt hinzufügen</ion-button>
+  </ion-item>
+  <ion-row *ngIf="recipe.instructions.length" class="ion-margin">
+    <ion-col>Schritt</ion-col>
+  </ion-row>
+  <ion-row *ngFor="let instruction of recipe.instructions; let i = index" class="ion-margin">
+    ({{i+1}})
+    <ion-input type="text" [(ngModel)]="instruction['text']"></ion-input>
+    <ion-button (click)="removeInstruction(instruction)" size="small" color="danger">
+      <ion-icon slot="icon-only" name="trash"></ion-icon>
+    </ion-button>
+  </ion-row>
+  <ion-item>
+    <ion-label>Zeiten</ion-label>
+    <ion-button (click)="addDuration()">Zeit hinzufügen</ion-button>
+  </ion-item>
+  <ion-row *ngIf="recipe.durations.length" class="ion-margin">
+    <ion-col>Zeit</ion-col>
+    <ion-col>Dauer (Minuten)</ion-col>
+  </ion-row>
+  <ion-row *ngFor="let duration of recipe.durations" class="ion-margin">
+    <ion-input type="text" [(ngModel)]="duration['name']"></ion-input>
+    <ion-input type="number" [(ngModel)]="duration['duration']"></ion-input>
+    <ion-button (click)="removeDuration(duration)" size="small" color="danger" *ngIf="duration['name']!='Gesamtzeit'">
+      <ion-icon slot="icon-only" name="trash"></ion-icon>
+    </ion-button>
+  </ion-row>
+
+  <ion-button (click)="saveRecipe()" expand="block" class="ion-margin" color="success">Speichern</ion-button>
+  <ion-button (click)="cancel()" expand="block" class="ion-margin" color="danger">Abbrechen</ion-button>
+  
+  
+
 
 </ion-content>

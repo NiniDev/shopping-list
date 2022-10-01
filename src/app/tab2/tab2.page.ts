@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { Ingredient } from '../models/ingredient-model';
 import { Recipe } from '../models/recipe-model';
 import { RecipeService } from '../services/recipe.service';
@@ -17,8 +17,9 @@ export class Tab2Page implements OnInit {
   constructor(
     private recipeService: RecipeService,
     private router: Router,
-    private modalController: ModalController
-  ) {}
+    private modalController: ModalController,
+    private alertController: AlertController
+  ) { }
 
   async ngOnInit() {
     const ingredients = [
@@ -37,13 +38,14 @@ export class Tab2Page implements OnInit {
       new Ingredient('Kräuter, z. B. Schittlauch, Petersilie', 0, 'einige'),
     ];
     const instructions = [
-      `Den Backofen bei Umluft und ca 200 Grad vorheizen. Das Backblech mit im Ofen lassen, damit es nachher schon gut heiß ist.
+      {
+        text: `Den Backofen bei Umluft und ca 200 Grad vorheizen. Das Backblech mit im Ofen lassen, damit es nachher schon gut heiß ist.
       Die Kartoffeln gründlich waschen (nicht schälen) und in gleichgroße/gleichdicke Schnitze schneiden.
       Für die Marinade alle restlichen Zutaten in einer Schüssel vermengen. Ich schmecke immer nochmal alles ab. Manche mögen es mal etwas salziger oder schärfer. Dann die noch rohen Wedges zu der Marinade geben und unterheben, damit alles gleichmäßg verteilt wird.
       Das Backblech aus dem Ofen holen und mit Backpapier auslegen. Die marinierten Wedges auf das Blech geben und darauf achten, dass alle möglichst einzeln verteilt sind und nicht aufeinander kleben. Dann das Blech für ca 25 - 30 Minuten in den Ofen geben.
       Ich schaue nach ca 25 min. immer mal wieder nach den Wedges, weil sie ja nicht zusammenschrumpeln und trocken werden sollen. Am Besten gegen Ende der Zeit mal probieren, ob sie durch sind.
       Für den Dip:
-      Alle Zutaten miteinander vermengen und nochmals abschmecken.`
+      Alle Zutaten miteinander vermengen und nochmals abschmecken.`}
     ];
     const durations = [
       { name: 'Arbeitszeit', duration: 15 },
@@ -67,7 +69,7 @@ export class Tab2Page implements OnInit {
   }
 
   openRecipe(recipe) {
-      this.router.navigate(['/recipe', recipe.getId()]);
+    this.router.navigate(['/recipe', recipe.getId()]);
   }
 
   createRecipe() {
@@ -81,9 +83,46 @@ export class Tab2Page implements OnInit {
       return modalEl.onDidDismiss();
     }).then(async resultData => {
       console.log(resultData.data, resultData.role);
-      if (resultData.role === 'confirm') {
+      if (resultData.role === 'save') {
+        let notGiven = [];
+        if (!resultData.data.title) {
+          notGiven.push('Titel');
+        }
+        if (!resultData.data.ingredients.length) {
+          notGiven.push('Zutaten');
+        }
+        if (!resultData.data.instructions.length) {
+          notGiven.push('Anleitung');
+        }
+        if (notGiven.length > 0) {
+          let message = 'Folgende Felder wurden nicht ausgefüllt: ';
+          notGiven.forEach(element => {
+            message += element + ', ';
+          });
+          message = message.slice(0, -2);
+          message += '. Trotzdem speichern?';
+          this.alertController.create({
+            header: 'Achtung',
+            message: message,
+            buttons: [
+              {
+                text: 'Abbrechen',
+                role: 'cancel'
+              },
+              {
+                text: 'Speichern',
+                handler: async () => {
+                  await this.recipeService.addRecipe(resultData.data);
+                  this.recipes = await this.recipeService.getRecipes();
+                }
+              }
+            ]
+          }).then(alertEl => { alertEl.present(); });
+        } else {
+          await this.recipeService.addRecipe(resultData.data);
+        }
         this.recipes = await this.recipeService.getRecipes();
       }
-    });
+    })
   }
 }
