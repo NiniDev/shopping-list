@@ -63,4 +63,14 @@ export class Tab1Page implements OnInit {
       alert.present();
     });
   }
+
+  async doRefresh(event) {
+    await this.shoppingListService.deleteChecked();
+    this.shoppingListService.getShoppingList().then(list => {
+      this.shoppingList = list;
+      setTimeout(() => {
+        event.target.complete();
+      }, 100);
+    });
+  }
 }
