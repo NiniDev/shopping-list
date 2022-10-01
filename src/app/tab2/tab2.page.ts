@@ -55,6 +55,10 @@ export class Tab2Page implements OnInit {
     const recipe = new Recipe('Potatoe Wedges mit Knoblauch Dip', ingredients, instructions, durations, true, 2);
     // await this.recipeService.addRecipe(recipe);
     this.recipes = await this.recipeService.getRecipes();
+    if (this.recipes.length === 0) {
+      await this.recipes.push(recipe);
+      await this.recipeService.addRecipe(recipe);
+    }
   }
 
   getTotalDurationString(recipe) {
@@ -124,5 +128,25 @@ export class Tab2Page implements OnInit {
         this.recipes = await this.recipeService.getRecipes();
       }
     })
+  }
+
+  deleteRecipe(recipe) {
+    this.alertController.create({
+      header: 'Achtung',
+      message: 'Rezept wirklich löschen?',
+      buttons: [
+        {
+          text: 'Abbrechen',
+          role: 'cancel'
+        },
+        {
+          text: 'Löschen',
+          handler: async () => {
+            await this.recipeService.removeRecipe(recipe);
+            this.recipes = await this.recipeService.getRecipes();
+          }
+        }
+      ]
+    }).then(alertEl => { alertEl.present(); });
   }
 }
