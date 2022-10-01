@@ -2,10 +2,11 @@ import { Ingredient } from "./ingredient-model";
 import * as uuid from 'uuid';
 
 export class Recipe {
+
     constructor(
         public title: string,
         public ingredients: Ingredient[],
-        public instructions: string[],
+        public instructions: object[],
         public durations: object[],
         public favorite: boolean,
         public personCount: number,
@@ -16,7 +17,8 @@ export class Recipe {
 
     public getIngredients(): Ingredient[] {
         return this.ingredients.map(ingredient => {
-            return new Ingredient(ingredient.name, ingredient.amount, ingredient.unit)});
+            return new Ingredient(ingredient.name, ingredient.amount, ingredient.unit)
+        });
     }
 
     public getTitle(): string {
@@ -24,7 +26,7 @@ export class Recipe {
     }
 
     public getInstructions(): string[] {
-        return this.instructions;
+        return this.instructions.map(instruction => instruction['text']);
     }
 
     public getDurations(): object[] {
@@ -52,7 +54,9 @@ export class Recipe {
     }
 
     public setInstructions(instructions: string[]) {
-        this.instructions = instructions;
+        this.instructions = instructions.map((instruction) => {
+            return { text: instruction };
+        });
     }
 
     public setDurations(durations: object[]) {
@@ -69,5 +73,25 @@ export class Recipe {
 
     public addIngredient(ingredient: Ingredient) {
         this.ingredients.push(ingredient);
+    }
+
+    public removeIngredient(ingredient: Ingredient) {
+        this.ingredients = this.ingredients.filter((i) => i !== ingredient);
+    }
+
+    public addInstruction(instruction: string) {
+        this.instructions.push({ text: instruction });
+    }
+
+    public removeInstruction(instruction: object) {
+        this.instructions = this.instructions.filter((i) => i !== instruction);
+    }
+
+    public addDuration(duration: { name: any; duration: any; }) {
+        this.durations.push(duration);
+    }
+
+    public removeDuration(duration: object) {
+        this.durations = this.durations.filter((i) => i !== duration);
     }
 }
