@@ -52,7 +52,7 @@ export class Tab2Page implements OnInit {
       { name: 'Koch-/Backzeit', duration: 25 },
       { name: 'Gesamtzeit', duration: 40 },
     ];
-    const recipe = new Recipe('Potatoe Wedges mit Knoblauch Dip', ingredients, instructions, durations, true, 2);
+    const recipe = new Recipe('Potatoe Wedges mit Knoblauch Dip', ingredients, instructions, durations, true, 2, ingredients);
     // await this.recipeService.addRecipe(recipe);
     this.recipeService.getRecipes().subscribe(recipes => {
       this.recipes = recipes;

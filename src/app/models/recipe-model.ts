@@ -10,6 +10,7 @@ export class Recipe {
         public durations: object[],
         public favorite: boolean,
         public personCount: number,
+        public toShoppingListIngredients: Ingredient[],
         private id?: string
     ) {
         this.id = id || uuid.v4();
@@ -91,5 +92,21 @@ export class Recipe {
 
     public removeDuration(duration: object) {
         this.durations = this.durations.filter((i) => i !== duration);
+    }
+
+    public addToShoppingList(ingredient: Ingredient) {
+        this.toShoppingListIngredients.push(ingredient);
+    }
+
+    public removeFromShoppingList(ingredient: Ingredient) {
+        this.toShoppingListIngredients = this.toShoppingListIngredients.filter((i) => i !== ingredient);
+    }
+
+    public getToShoppingListIngredients(): Ingredient[] {
+        return this.toShoppingListIngredients;
+    }
+
+    public setToShoppingListIngredients(ingredients: Ingredient[]) {
+        this.toShoppingListIngredients = ingredients;
     }
 }

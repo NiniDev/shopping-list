@@ -42,6 +42,7 @@ export class RecipeService {
         recipe.durations,
         recipe.favorite,
         recipe.personCount,
+        recipe.toShoppingListIngredients,
         recipe.id
       );
     });

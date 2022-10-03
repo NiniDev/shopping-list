@@ -11,7 +11,7 @@ import { Recipe } from 'src/app/models/recipe-model';
 export class CreateRecipePage implements OnInit {
   mode: string;
   recipe: Recipe = new Recipe(
-    '', [], [], [{ name: 'Gesamtzeit', duration: 0 }], false, 4
+    '', [], [], [{ name: 'Gesamtzeit', duration: 0 }], false, 4, []
   );
   private givenMode: string;
 
