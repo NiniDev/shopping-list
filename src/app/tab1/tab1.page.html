@@ -17,12 +17,12 @@
   </ion-header>
 
   <ion-list *ngIf="getShoppingList(true).length || getShoppingList(false).length">
-    <ion-item *ngFor="let item of getShoppingList(false)">
+    <ion-item *ngFor="let item of getShoppingList(false); trackBy:trackByFn">
       <ion-label>{{item.toString()}}</ion-label>
       <ion-checkbox slot="end" (ionChange)="toggleChecked(item)" [checked]="item.getChecked()"></ion-checkbox>
     </ion-item>
     <ion-item-divider *ngIf="getShoppingList(true).length && getShoppingList(false).length"></ion-item-divider>
-    <ion-item *ngFor="let item of getShoppingList(true)">
+    <ion-item *ngFor="let item of getShoppingList(true); trackBy:trackByFn">
       <ion-label>{{item.toString()}}</ion-label>
       <ion-checkbox slot="end" (ionChange)="toggleChecked(item)" [checked]="item.getChecked()"></ion-checkbox>
     </ion-item>
