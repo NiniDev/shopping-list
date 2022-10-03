@@ -47,7 +47,31 @@ export class ShoppinglistService {
 
   async addListItem(listItem: ListItem) {
     const shoppingList = this.mappedShoppinglist(await this.store.get('shoppingList') || []);
-    shoppingList.push(listItem);
+    let needToPush = true;
+    // check if item with same name already exists
+    if (listItem['ingredient'] instanceof Object) {
+      const index = shoppingList.findIndex(item => item['ingredient']['name'] === listItem['ingredient']['name'] );
+      // chef if item is already checked and if same unit
+      if (index !== -1 && !shoppingList[index]['checked'] && shoppingList[index]['ingredient']['unit'] === listItem['ingredient']['unit']) {
+        // add amount to existing item
+        console.log('add amount to existing item', shoppingList[index]['ingredient']);
+        console.log(shoppingList[index]['ingredient']['amount']);
+        shoppingList[index]['ingredient']['amount'] = shoppingList[index]['ingredient']['amount']/1
+        shoppingList[index]['ingredient']['amount'] += listItem['ingredient']['amount']/1;
+        needToPush = false;
+      }
+    } else {
+      // check if item with same name already exists
+      const index = shoppingList.findIndex(item => item['ingredient'] === listItem['ingredient']);
+      if (index !== -1 && !shoppingList[index].getChecked()) {
+        // add amount to existing item
+        shoppingList[index].setAmount(shoppingList[index].getAmount()/1 + listItem.getAmount()/1);
+        needToPush = false;
+      }
+    }
+    if (needToPush) {
+      shoppingList.push(listItem);
+    }
     await this.store.set('shoppingList', shoppingList);
     this.updateObservable();
   }
@@ -76,7 +100,33 @@ export class ShoppinglistService {
 
   async addItems(items: ListItem[]) {
     const shoppingList = this.mappedShoppinglist(await this.store.get('shoppingList') || []);
-    shoppingList.push(...items);
+    items.forEach(item => {
+      let needToPush = true;
+      // check if item with same name already exists
+      if (item['ingredient'] instanceof Object) {
+        const index = shoppingList.findIndex(listItem => listItem['ingredient']['name'] === item['ingredient']['name'] );
+        // chef if item is already checked and if same unit
+        if (index !== -1 && !shoppingList[index]['checked'] && shoppingList[index]['ingredient']['unit'] === item['ingredient']['unit']) {
+          // add amount to existing item
+          console.log('add amount to existing item', shoppingList[index]['ingredient']);
+          console.log(shoppingList[index]['ingredient']['amount']);
+          shoppingList[index]['ingredient']['amount'] = shoppingList[index]['ingredient']['amount']/1
+          shoppingList[index]['ingredient']['amount'] += item['ingredient']['amount']/1;
+          needToPush = false;
+        }
+      } else {
+        // check if item with same name already exists
+        const index = shoppingList.findIndex(listItem => listItem['ingredient'] === item['ingredient']);
+        if (index !== -1 && !shoppingList[index].getChecked()) {
+          // add amount to existing item
+          shoppingList[index].setAmount(shoppingList[index].getAmount()/1 + item.getAmount()/1);
+          needToPush = false;
+        }
+      }
+      if (needToPush) {
+        shoppingList.push(item);
+      }
+    });
     await this.store.set('shoppingList', shoppingList);
     this.updateObservable();
   }
