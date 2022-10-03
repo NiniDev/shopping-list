@@ -75,22 +75,16 @@
       <p>Zutaten bearbeiten, die zum Einkaufszettel hinzugefügt werden sollen.</p>
       <ion-grid>
         <h4>Alle Zutaten</h4>
-        <ion-row>
-          <ion-col size="auto">
-            <ion-row *ngFor="let ingredient of recipe.ingredients">
-              <ion-label style="width: 100%; text-align: right;">{{ingredient.amount ? ingredient?.amount : '' }}
-                {{ingredient?.unit}}</ion-label>
-            </ion-row>
+        <ion-row *ngFor="let ingredient of recipe.ingredients">
+          <ion-col size="auto" style="--ion-grid-column-padding: 0">
+              <ion-label style="width: 100%;">{{ingredient.amount ? ingredient?.amount : '' }}
+                {{ingredient?.unit}} &nbsp;</ion-label>
           </ion-col>
-          <ion-col size="">
-            <ion-row *ngFor="let ingredient of recipe.ingredients">
-              <ion-label>{{ingredient?.name}}</ion-label>
-            </ion-row>
+          <ion-col style="--ion-grid-column-padding: 0">
+              <ion-label> {{ingredient?.name}}</ion-label>
           </ion-col>
-          <ion-col size="auto">
-            <ion-row *ngFor="let ingredient of recipe.ingredients">
-              <ion-label color="primary" (click)="addToShoppingListList(ingredient)" button>Hinzufügen</ion-label>
-            </ion-row>
+          <ion-col size="auto" style="--ion-grid-column-padding: 0">
+              <ion-button color="primary" (click)="addToShoppingListList(ingredient)" size="small" fill="clear" style="padding: 0; margin: 0;">Hinzufügen</ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
