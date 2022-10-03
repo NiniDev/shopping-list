@@ -31,13 +31,17 @@ export class RecipePage implements OnInit {
     this.recipe = await this.recipeService.getRecipe(this.id);
     this.currentPersonCount = this.recipe.getPersonCount();
     this.ingredients = this.recipe.getIngredients();
-    console.log(this.recipe);
   }
   
   async onAddToShoppingList() {
-    await this.shoppingListService.addItems(this.recipe.getIngredients().map(ingredient => {      
-      return new ListItem(ingredient, false, 1);
-    }));
+    const ingredients = this.recipe.getToShoppingListIngredients();
+    const items = [];
+    for (let ingredient of ingredients) {
+      const amount = ingredient.amount * this.currentPersonCount / this.recipe.getPersonCount()
+      const listItem = new ListItem(ingredient.unit + " " + ingredient.name, false, amount);
+      items.push(listItem);
+    }
+    await this.shoppingListService.addItems(items);
   }
 
   changePersonCount() {
@@ -132,5 +136,29 @@ export class RecipePage implements OnInit {
         this.updateIngedients();
       }
     })
+  }
+
+  onWillDismiss(event: Event) {
+    const ev = event
+    if (ev['detail'].data.save) {
+      console.log(this.recipe.toShoppingListIngredients);
+      this.recipeService.updateRecipe(this.recipe, this.recipe);
+    }
+  }
+
+  // Modal
+
+  addToShoppingListList(ingredient: Ingredient) {
+    this.recipe.addToShoppingList(ingredient);
+  }
+
+  removeFromShoppingListList(ingredient: Ingredient) {
+    this.recipe.removeFromShoppingList(ingredient);
+  }
+
+  saveModalChanges(save: boolean) {
+    this.modalController.dismiss({
+      'save': save,
+    });
   }
 }

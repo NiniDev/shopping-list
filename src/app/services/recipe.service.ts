@@ -63,7 +63,7 @@ export class RecipeService {
     this.updateObservable();
   }
 
-  async updateRecipe(recipe: Recipe, changes: { title?: string, ingredients?: any[], instructions?: object[], durations?: object[], favorite?: boolean, personCount?: number }) {
+  async updateRecipe(recipe: Recipe, changes: { title?: string, ingredients?: any[], instructions?: object[], durations?: object[], favorite?: boolean, personCount?: number, toShoppingListIngredients?: any[] }) {
     const recipes = this.mappedRecipes(await this.store.get('recipes') || []);
     const index = recipes.findIndex(item => item.getId() === recipe.getId());
     recipes[index].setTitle(changes.title || recipe.getTitle());
@@ -72,6 +72,7 @@ export class RecipeService {
     recipes[index].setDurations(changes.durations || recipe.getDurations());
     recipes[index].setFavorite(changes.favorite || recipe.getFavorite());
     recipes[index].setPersonCount(changes.personCount || recipe.getPersonCount());
+    recipes[index].setToShoppingListIngredients(changes.toShoppingListIngredients || recipe.getToShoppingListIngredients());
     await this.store.set('recipes', recipes);
     this.updateObservable();
   }

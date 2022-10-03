@@ -43,7 +43,8 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-button expand="block" (click)="onAddToShoppingList()">Zutaten hinzufügen</ion-button>
+      <ion-button expand="block" (click)="onAddToShoppingList()">Zutaten Einkaufen</ion-button>
+      <ion-button expand="block" id="onEditShoppingListIngredients">Bearbeiten</ion-button>
     </ion-row>
   </ion-grid>
   <ion-grid>
@@ -57,5 +58,56 @@
       </ion-row>
     </ion-row>
   </ion-grid>
+
+  <ion-modal trigger="onEditShoppingListIngredients" (willDismiss)="onWillDismiss($event)" #modal>
+    <!-- Edit the ingredients that will be added to the shopping list -->
+    <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Zutaten bearbeiten</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="saveModalChanges(true)">Fertig</ion-button>  
+          <ion-button (click)="saveModalChanges(false)">Abbrechen</ion-button>  
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <p>Zutaten bearbeiten, die zum Einkaufszettel hinzugefügt werden sollen.</p>
+      <ion-grid>
+        <h4>Alle Zutaten</h4>
+        <ion-row>
+          <ion-col size="auto">
+            <ion-row *ngFor="let ingredient of recipe.ingredients">
+              <ion-label style="width: 100%; text-align: right;">{{ingredient.amount ? ingredient?.amount : '' }}
+                {{ingredient?.unit}}</ion-label>
+            </ion-row>
+          </ion-col>
+          <ion-col size="">
+            <ion-row *ngFor="let ingredient of recipe.ingredients">
+              <ion-label>{{ingredient?.name}}</ion-label>
+            </ion-row>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-row *ngFor="let ingredient of recipe.ingredients">
+              <ion-label color="primary" (click)="addToShoppingListList(ingredient)" button>Hinzufügen</ion-label>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid>
+        <h4>Einkaufszettel-Zutaten</h4>
+        <ion-row *ngFor="let ingredient of recipe.toShoppingListIngredients" class="ion-margin-horizontal">
+          <ion-input type="text" [(ngModel)]="ingredient.name"></ion-input>
+          <ion-input type="number" [(ngModel)]="ingredient.amount"></ion-input>
+          <ion-input type="text" [(ngModel)]="ingredient.unit"></ion-input>
+          <ion-button (click)="removeFromShoppingListList(ingredient)" size="small" color="danger">
+            <ion-icon slot="icon-only" name="remove"></ion-icon>
+          </ion-button>
+        </ion-row>
+      </ion-grid>
+    </ion-content>
+  </ng-template>
+  </ion-modal>
 
 </ion-content>
