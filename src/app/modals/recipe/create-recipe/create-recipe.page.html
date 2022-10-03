@@ -39,7 +39,7 @@
   </ion-row>
   <ion-row *ngFor="let instruction of recipe.instructions; let i = index" class="ion-margin">
     ({{i+1}})
-    <ion-input type="text" [(ngModel)]="instruction['text']"></ion-input>
+    <ion-textarea type="text" [(ngModel)]="instruction['text']" autoGrow></ion-textarea>
     <ion-button (click)="removeInstruction(instruction)" size="small" color="danger">
       <ion-icon slot="icon-only" name="trash"></ion-icon>
     </ion-button>
