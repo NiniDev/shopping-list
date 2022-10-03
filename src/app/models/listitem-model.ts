@@ -13,7 +13,7 @@ export class ListItem {
 
     toString() {
         if (this.ingredient instanceof Object) {
-            return `${this.ingredient.name}`;
+            return `${this.ingredient.amount ? this.ingredient.amount : '' } ${this.ingredient.unit} ${this.ingredient.name}`;
         }
         return `${this.amount} ${this.ingredient}`;
     }
