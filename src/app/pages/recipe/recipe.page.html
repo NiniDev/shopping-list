@@ -47,7 +47,7 @@
     <ion-row>
         <ion-row *ngFor="let step of recipe?.getInstructions();let i = index">
           <ion-col size="auto"><strong>{{i+1}}.</strong></ion-col>
-          <ion-col>{{step}}</ion-col>
+          <ion-col>{{step['text']}}</ion-col>
         </ion-row>
     </ion-row>
   </ion-grid>

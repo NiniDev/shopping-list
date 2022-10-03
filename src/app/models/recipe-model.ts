@@ -25,8 +25,8 @@ export class Recipe {
         return this.title;
     }
 
-    public getInstructions(): string[] {
-        return this.instructions.map(instruction => instruction['text']);
+    public getInstructions(): object[] {
+        return this.instructions
     }
 
     public getDurations(): object[] {
@@ -53,10 +53,8 @@ export class Recipe {
         this.ingredients = ingredients;
     }
 
-    public setInstructions(instructions: string[]) {
-        this.instructions = instructions.map((instruction) => {
-            return { text: instruction };
-        });
+    public setInstructions(instructions: object[]) {
+        this.instructions = instructions;
     }
 
     public setDurations(durations: object[]) {
