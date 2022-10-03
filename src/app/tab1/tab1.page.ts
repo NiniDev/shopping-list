@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { Ingredient } from '../models/ingredient-model';
 import { ListItem } from '../models/listitem-model';
 import { ShoppinglistService } from '../services/shoppinglist.service';
 
@@ -45,6 +46,11 @@ export class Tab1Page implements OnInit {
           name: 'amount',
           type: 'number',
           placeholder: 'Menge'
+        },
+        {
+          name: 'unit',
+          type: 'text',
+          placeholder: 'Einheit'
         }
       ],
       buttons: [
@@ -55,8 +61,16 @@ export class Tab1Page implements OnInit {
         {
           text: 'Hinzufügen',
           handler: async data => {
-            const listItem = new ListItem(data.name, false, data.amount);
-            await this.shoppingListService.addListItem(listItem);
+            if (data.name && data.amount && data.unit) {
+              await this.shoppingListService.addListItem(new ListItem(new Ingredient(
+                data.name,
+                data.amount,
+                data.unit
+              ), false, data.amount));
+            } else {
+              const listItem = new ListItem(data.name, false, data.amount);
+              await this.shoppingListService.addListItem(listItem);
+            }
           }
         }
       ]
