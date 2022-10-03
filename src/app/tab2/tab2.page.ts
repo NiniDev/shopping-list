@@ -54,11 +54,9 @@ export class Tab2Page implements OnInit {
     ];
     const recipe = new Recipe('Potatoe Wedges mit Knoblauch Dip', ingredients, instructions, durations, true, 2);
     // await this.recipeService.addRecipe(recipe);
-    this.recipes = await this.recipeService.getRecipes();
-    if (this.recipes.length === 0) {
-      await this.recipes.push(recipe);
-      await this.recipeService.addRecipe(recipe);
-    }
+    this.recipeService.getRecipes().subscribe(recipes => {
+      this.recipes = recipes;
+    });
   }
 
   getTotalDurationString(recipe) {
@@ -117,7 +115,6 @@ export class Tab2Page implements OnInit {
                 text: 'Speichern',
                 handler: async () => {
                   await this.recipeService.addRecipe(resultData.data);
-                  this.recipes = await this.recipeService.getRecipes();
                 }
               }
             ]
@@ -125,7 +122,6 @@ export class Tab2Page implements OnInit {
         } else {
           await this.recipeService.addRecipe(resultData.data);
         }
-        this.recipes = await this.recipeService.getRecipes();
       }
     })
   }
@@ -143,7 +139,6 @@ export class Tab2Page implements OnInit {
           text: 'Löschen',
           handler: async () => {
             await this.recipeService.removeRecipe(recipe);
-            this.recipes = await this.recipeService.getRecipes();
           }
         }
       ]

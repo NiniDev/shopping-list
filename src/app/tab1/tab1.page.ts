@@ -18,7 +18,9 @@ export class Tab1Page implements OnInit {
 
   async ngOnInit() {
     await this.shoppingListService.deleteChecked();
-    this.shoppingList = await this.shoppingListService.getShoppingList();
+    this.shoppingListService.getShoppingList().subscribe(listItems => {
+      this.shoppingList = listItems;
+    });
   }
 
   toggleChecked(listItem: ListItem) {
@@ -55,7 +57,6 @@ export class Tab1Page implements OnInit {
           handler: async data => {
             const listItem = new ListItem(data.name, false, data.amount);
             await this.shoppingListService.addListItem(listItem);
-            this.shoppingList = await this.shoppingListService.getShoppingList();
           }
         }
       ]
@@ -66,11 +67,12 @@ export class Tab1Page implements OnInit {
 
   async doRefresh(event) {
     await this.shoppingListService.deleteChecked();
-    this.shoppingListService.getShoppingList().then(list => {
-      this.shoppingList = list;
-      setTimeout(() => {
-        event.target.complete();
-      }, 100);
-    });
+    setTimeout(() => {
+      event.target.complete();
+    }, Math.random() * 200);
+  }
+
+  trackByFn(index, item) {
+    return item.id;
   }
 }
