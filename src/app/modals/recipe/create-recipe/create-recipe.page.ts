@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, NavParams } from '@ionic/angular';
 import { Ingredient } from 'src/app/models/ingredient-model';
 import { Recipe } from 'src/app/models/recipe-model';
 
@@ -13,26 +13,29 @@ export class CreateRecipePage implements OnInit {
   recipe: Recipe = new Recipe(
     '', [], [], [{ name: 'Gesamtzeit', duration: 0 }], false, 4
   );
+  private givenMode: string;
 
   constructor(
     private modalController: ModalController,
-    private alertController: AlertController
-  ) { }
+    private alertController: AlertController,
+    public navParams : NavParams
+  ) {
+    this.givenMode = this.navParams.get('mode');
+  }
 
   ngOnInit() {
-    this.modalController.getTop().then((modal) => {
-      switch (modal?.componentProps.mode) {
-        case 'create':
-          this.mode = 'Neues Rezept erstellen';
-          break;
-        case 'edit':
-          this.mode = 'Rezept bearbeiten';
-          break;
-        default:
-          this.mode = 'Neues Rezept erstellen';
-          break;
-      }
-    });
+    switch (this.givenMode) {
+      case 'create':
+        this.mode = 'Neues Rezept erstellen';
+        break;
+      case 'edit':
+        this.mode = 'Rezept bearbeiten';
+        this.recipe = this.navParams.get('recipe');
+        break;
+      default:
+        this.mode = 'Neues Rezept erstellen';
+        break;
+    }
   }
 
   addIngredient() {
