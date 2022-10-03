@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
+import { CreateRecipePage } from 'src/app/modals/recipe/create-recipe/create-recipe.page';
 import { Ingredient } from 'src/app/models/ingredient-model';
 import { ListItem } from 'src/app/models/listitem-model';
 import { Recipe } from 'src/app/models/recipe-model';
@@ -22,7 +23,8 @@ export class RecipePage implements OnInit {
     private recipeService: RecipeService,
     private shoppingListService: ShoppinglistService,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private modalController: ModalController
   ) {}
 
   async ngOnInit() {
@@ -77,5 +79,58 @@ export class RecipePage implements OnInit {
   toggleFavorite() {
     this.recipe.setFavorite(!this.recipe.getFavorite());
     this.recipeService.updateRecipe(this.recipe, this.recipe);
+  }
+
+  onEditRecipe() {
+    this.modalController.create({
+      component: CreateRecipePage,
+      componentProps: {
+        mode: 'edit',
+        recipe: this.recipe
+      }
+    }).then(modalEl => {
+      modalEl.present();
+      return modalEl.onDidDismiss();
+    }).then(async resultData => {
+      if (resultData.role === 'save') {
+        let notGiven = [];
+        if (!resultData.data.title) {
+          notGiven.push('Titel');
+        }
+        if (!resultData.data.ingredients.length) {
+          notGiven.push('Zutaten');
+        }
+        if (!resultData.data.instructions.length) {
+          notGiven.push('Anleitung');
+        }
+        if (notGiven.length > 0) {
+          let message = 'Folgende Felder sind nicht ausgefüllt: ';
+          notGiven.forEach(element => {
+            message += element + ', ';
+          });
+          message = message.slice(0, -2);
+          message += '. Trotzdem speichern?';
+          this.alertController.create({
+            header: 'Achtung',
+            message: message,
+            buttons: [
+              {
+                text: 'Abbrechen',
+                role: 'cancel'
+              },
+              {
+                text: 'Speichern',
+                handler: async () => {
+                  await this.recipeService.updateRecipe(resultData.data, resultData.data);
+                }
+              }
+            ]
+          }).then(alertEl => { alertEl.present(); });
+        } else {
+          await this.recipeService.updateRecipe(resultData.data, resultData.data);
+        }
+        this.updateIngedients();
+      }
+    })
   }
 }
