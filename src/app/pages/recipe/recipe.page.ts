@@ -38,7 +38,7 @@ export class RecipePage implements OnInit {
     const items = [];
     for (let ingredient of ingredients) {
       const amount = ingredient.amount * this.currentPersonCount / this.recipe.getPersonCount()
-      const listItem = new ListItem(ingredient.unit + " " + ingredient.name, false, amount);
+      const listItem = new ListItem(ingredient, false, amount);
       items.push(listItem);
     }
     await this.shoppingListService.addItems(items);

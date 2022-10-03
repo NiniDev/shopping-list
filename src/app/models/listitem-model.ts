@@ -13,9 +13,9 @@ export class ListItem {
 
     toString() {
         if (this.ingredient instanceof Object) {
-            return `${this.ingredient.amount ? this.ingredient.amount : '' } ${this.ingredient.unit} ${this.ingredient.name}`;
+            return `${this.ingredient.amount ? this.ingredient.amount : '' }${this.ingredient.unit} ${this.ingredient.name}`;
         }
-        return `${this.amount} ${this.ingredient}`;
+        return `${this.amount ? this.amount + ' ' : ''}${this.ingredient}`;
     }
 
     setChecked(checked: boolean) {
