@@ -4,6 +4,11 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>{{recipe?.getTitle()}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onEditRecipe()">
+        <ion-icon slot="icon-only" name="create"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -22,12 +27,13 @@
   </ion-chip>
   <ion-grid>
     <ion-row>
-        <ion-title>Zutaten</ion-title>
+      <ion-title>Zutaten</ion-title>
     </ion-row>
     <ion-row>
       <ion-col size="auto">
         <ion-row *ngFor="let ingredient of ingredients">
-          <ion-label style="width: 100%; text-align: right;">{{ingredient.amount ? ingredient?.getAmount() : '' }} {{ingredient?.getUnit()}}</ion-label>
+          <ion-label style="width: 100%; text-align: right;">{{ingredient.amount ? ingredient?.getAmount() : '' }}
+            {{ingredient?.getUnit()}}</ion-label>
         </ion-row>
       </ion-col>
       <ion-col size="auto">
@@ -45,12 +51,11 @@
       <ion-title>Zubereitung</ion-title>
     </ion-row>
     <ion-row>
-        <ion-row *ngFor="let step of recipe?.getInstructions();let i = index">
-          <ion-col size="auto"><strong>{{i+1}}.</strong></ion-col>
-          <ion-col>{{step['text']}}</ion-col>
-        </ion-row>
+      <ion-row *ngFor="let step of recipe?.getInstructions();let i = index">
+        <ion-col size="auto"><strong>{{i+1}}.</strong></ion-col>
+        <ion-col>{{step['text']}}</ion-col>
+      </ion-row>
     </ion-row>
   </ion-grid>
-
 
 </ion-content>
